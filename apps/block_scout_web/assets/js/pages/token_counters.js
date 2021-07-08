@@ -1,12 +1,14 @@
 import $ from 'jquery'
 import omit from 'lodash/omit'
 import humps from 'humps'
+import { subscribeChannel } from '../socket'
 import { createStore, connectElements } from '../lib/redux_helpers.js'
 import '../lib/async_listing_load'
 import '../app'
 import {
   openQrModal
 } from '../lib/modals'
+import { createAsyncLoadStore, loadPage } from '../lib/async_listing_load'
 
 export const initialState = {
   channelDisconnected: false,
@@ -21,8 +23,6 @@ export function reducer (state = initialState, action) {
       return Object.assign({}, state, omit(action, 'type'))
     }
     case 'CHANNEL_DISCONNECTED': {
-      if (state.beyondPageOne) return state
-
       return Object.assign({}, state, {
         channelDisconnected: true
       })
@@ -37,7 +37,7 @@ export function reducer (state = initialState, action) {
       return state
   }
 }
-
+ 
 const elements = {
   '[data-page="counters"]': {
     render ($el, state) {
@@ -86,9 +86,36 @@ function loadCounters (store) {
 const $tokenPage = $('[token-page]')
 
 if ($tokenPage.length) {
+  updateCounters()
+}
+
+function updateCounters(){
   const store = createStore(reducer)
   connectElements({ store, elements })
   loadCounters(store)
+}
+
+if ($('[data-page="token-holders-list"]').length) {
+
+  const asyncElements = {
+    '[data-selector="channel-disconnected-message"]': {
+      render ($el, state) {
+        if (state.channelDisconnected) $el.show()
+      }
+    }
+  }
+
+  const store = createAsyncLoadStore(reducer, initialState, null)
+  connectElements({ store, asyncElements})
+
+  const addressHash = $('[data-page="token-details"]')[0].dataset.pageAddressHash
+  const tokensChannel = subscribeChannel(`tokens:${addressHash}`)
+  tokensChannel.onError(() => store.dispatch({ type: 'CHANNEL_DISCONNECTED' }))
+  tokensChannel.on('token_transfer', (_msg) => {
+    const uri = new URL(window.location)
+    loadPage(store, uri.pathname + uri.search)
+    updateCounters()
+  })
 }
 
 $('.btn-qr-icon').click(_event => {

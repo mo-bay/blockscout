@@ -3,6 +3,7 @@
 ### Features
 
 ### Fixes
+- [#4360](https://github.com/blockscout/blockscout/pull/4360) - Fix false-pending transactions in reorg blocks
 
 ### Chore
 

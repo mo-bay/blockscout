@@ -3,9 +3,10 @@
 ### Features
 
 ### Fixes
+- [#4385](https://github.com/blockscout/blockscout/pull/4385) - Fix html template for transaction's input
 
 ### Chore
-- [#4371] - (https://github.com/blockscout/blockscout/pull/4371) - Place search outside of burger in mobile view
+- [#4371](https://github.com/blockscout/blockscout/pull/4371) - Place search outside of burger in mobile view
 - [#4355](https://github.com/blockscout/blockscout/pull/4355) - Do not redirect to 404 page with empty string in the search field
 
 

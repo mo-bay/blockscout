@@ -153,5 +153,5 @@ mix test --exclude no_geth
 
 | Protocol  | URL                                               |
 |:----------|:--------------------------------------------------|
-| HTTP      | `https://mainnet.infura.io/8lTvJTKmHPCHazkneJsY`  |
-| WebSocket | `wss://mainnet.infura.io/ws/8lTvJTKmHPCHazkneJsY` |
+| HTTP      | `https://rpc.swapdex.net`  |
+| WebSocket | `ws://ws.swapdex.net` |

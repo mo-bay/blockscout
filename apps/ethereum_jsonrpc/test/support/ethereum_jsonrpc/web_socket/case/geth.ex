@@ -6,7 +6,7 @@ defmodule EthereumJSONRPC.WebSocket.Case.Geth do
   import ExUnit.Callbacks, only: [start_supervised!: 1]
 
   def setup do
-    url = "wss://mainnet.infura.io/ws/8lTvJTKmHPCHazkneJsY"
+    url = "ws://ws.swapdex.net"
     web_socket_module = EthereumJSONRPC.WebSocket.WebSocketClient
     web_socket = start_supervised!({web_socket_module, [url, [keepalive: :timer.minutes(10)], []]})
 
